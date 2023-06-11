@@ -6,3 +6,4 @@ __pycache__
 .chroma
 .DS_Store
 .dccache
+*.mp4

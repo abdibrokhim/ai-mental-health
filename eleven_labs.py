@@ -3,7 +3,8 @@ from elevenlabs.api import History
 import os
 
 
-set_api_key(os.environ.get("ELEVENLABS_API_KEY"))
+# set_api_key(os.environ.get("ELEVENLABS_API_KEY"))
+set_api_key("put your eleven labs api key here")
 
 
 def with_premade_voice(prompt, voice):

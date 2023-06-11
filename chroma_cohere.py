@@ -7,6 +7,7 @@ from langchain.chains import VectorDBQA
 from langchain.document_loaders import PyMuPDFLoader
 
 
+COHERE_API_KEY="put your cohere api key here"
 
 def generate_prompt(query, file_path):
 
@@ -18,10 +19,11 @@ def generate_prompt(query, file_path):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
     texts = text_splitter.split_documents(documents)
 
-    embeddings = CohereEmbeddings(cohere_api_key=os.environ.get("COHERE_API_KEY"))
+    # embeddings = CohereEmbeddings(cohere_api_key=os.environ.get("COHERE_API_KEY"))
+    embeddings = CohereEmbeddings(cohere_api_key=COHERE_API_KEY)
     vectordb = Chroma.from_documents(texts, embeddings)
 
-    qa = VectorDBQA.from_chain_type(llm=Cohere(cohere_api_key=os.environ.get("COHERE_API_KEY")), chain_type="stuff", vectorstore=vectordb)
+    qa = VectorDBQA.from_chain_type(llm=Cohere(cohere_api_key=COHERE_API_KEY), chain_type="stuff", vectorstore=vectordb)
 
     prompt = qa.run(query)
 
