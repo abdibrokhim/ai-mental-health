@@ -2,3 +2,8 @@
 .env
 env
 venv
+__pycache__
+*.pdf
+.chroma
+.DS_Store
+.dccache

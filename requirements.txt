@@ -2,3 +2,12 @@ streamlit
 streamlit-chat
 pyaudio
 openai
+chromadb
+langchain
+pymupdf
+cohere
+stability-sdk
+mutagen
+Pillow
+moviepy
+elevenlabs
