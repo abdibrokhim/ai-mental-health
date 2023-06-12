@@ -187,6 +187,7 @@ st.button(
 
 text_spinner_placeholder = st.empty()
 
+
 if st.session_state.prompt_generate:
     st.markdown("""---""")
     st.text_area(label="Generated Prompt", value=st.session_state.prompt_generate,)
@@ -200,9 +201,6 @@ shorts_spinner_placeholder = st.empty()
 
 if st.session_state.text_error:
     st.error(st.session_state.text_error)
-
-
-# st.session_state.video_path = "static/output/result.mp4"
 
 
 if st.session_state.video_path:

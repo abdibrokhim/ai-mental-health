@@ -5,15 +5,16 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.llms import Cohere
 from langchain.chains import VectorDBQA
 from langchain.document_loaders import PyMuPDFLoader
+from dotenv import load_dotenv
 
-
-COHERE_API_KEY="put your cohere api key here"
+load_dotenv()
+COHERE_API_KEY=os.getenv("COHERE_API_KEY")
 
 def generate_prompt(query, file_path):
 
     print('query:', query)
 
-    loader = PyMuPDFLoader("static/files/book.pdf")
+    loader = PyMuPDFLoader(file_path)
     documents = loader.load()
 
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)

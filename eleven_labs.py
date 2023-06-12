@@ -1,10 +1,10 @@
 from elevenlabs import clone, generate, play, set_api_key, VOICES_CACHE, voices
 from elevenlabs.api import History
 import os
+from dotenv import load_dotenv
 
-
-# set_api_key(os.environ.get("ELEVENLABS_API_KEY"))
-set_api_key("put your eleven labs api key here")
+load_dotenv()
+set_api_key(os.getenv("ELEVENLABS_API_KEY"))
 
 
 def with_premade_voice(prompt, voice):
@@ -28,3 +28,4 @@ def with_premade_voice(prompt, voice):
         print(e)
 
         return ""
+
