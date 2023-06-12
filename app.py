@@ -10,13 +10,27 @@ import streamlit as st
 import stable_diffusion, chroma_cohere, eleven_labs, video_gen, helper, clean_up
 
 
-def generate_prompt():
+
+def generate_shorts():
 
     st.session_state.text_error = ""
 
+    if st.session_state.cohere_api_key == "" or st.session_state.elevenlabs_api_key == "" or st.session_state.stable_diffusion_api_key == "":
+        st.session_state.text_error = "Missed API key."
+        return
+
+
+    st.session_state.text_error = ""
+
+    if st.session_state.file_path == "" or st.session_state.query == "":
+        st.session_state.text_error = "Missed a file or query."
+        return
+
     with text_spinner_placeholder:
         with st.spinner("Please wait while we process your query..."):
-            prompt = chroma_cohere.generate_prompt(query=st.session_state.query, file_path=st.session_state.file_path)
+            print('st.session_state.cohere_api_key:', st.session_state.cohere_api_key)
+
+            prompt = chroma_cohere.generate_prompt(query=st.session_state.query, file_path=st.session_state.file_path, cohere_api_key=st.session_state.cohere_api_key)
 
             if prompt == "":
                 st.session_state.text_error = "Your request activated the API's safety filters and could not be processed. Please modify the prompt and try again."
@@ -26,27 +40,15 @@ def generate_prompt():
             st.session_state.prompt_generate = (prompt)
 
 
-
-def imagine(im_query):
-    
-    img_path = stable_diffusion.imagine(prompt_list=im_query)
-    
-    st.session_state.img_path = (img_path)
-
-
-
-def generate_shorts():
-
-    generate_prompt()
-
+    st.session_state.text_error = ""
 
     if len(st.session_state.prompt_generate) == len("I don't know") or st.session_state.prompt_generate == "":
         st.session_state.text_error = "Something went wrong. Please refresh the page and try again."
         st.session_state.prompt_generate = ""
-        
-        generate_shorts()
+        return
+        # generate_shorts()
 
-
+    
     st.session_state.text_error = ""
 
     with texts_spinner_placeholder:
@@ -65,13 +67,33 @@ def generate_shorts():
     with image_spinner_placeholder:
         with st.spinner("Please wait while we generating images..."):
 
-            imagine(clean_text_list)
+            st.session_state.text_error = ""
+
+            if clean_text_list == []:
+                st.session_state.text_error = "Something went wrong. Please refresh the page and try again."
+                return
+            
+            img_path = stable_diffusion.imagine(prompt_list=clean_text_list, stable_diffusion_api_key=st.session_state.stable_diffusion_api_key)
+
+            if img_path == "":
+                st.session_state.text_error = "Your request activated the API's safety filters and could not be processed. Please modify the prompt and try again."
+                logging.info(f"Text Error: {st.session_state.text_error}")
+                return
+            
+            st.session_state.img_path = (img_path)
 
 
     with audio_spinner_placeholder:
         with st.spinner("Please wait while we generating audio..."):
 
-            st.session_state.audio_path = (eleven_labs.with_premade_voice(prompt=clean_text, voice="Bella"))
+            st.session_state.text_error = ""
+
+            st.session_state.audio_path = (eleven_labs.with_premade_voice(prompt=clean_text, voice="Bella", elevenlabs_api_key=st.session_state.elevenlabs_api_key))
+
+            if st.session_state.audio_path == "":
+                st.session_state.text_error = "Your request activated the API's safety filters and could not be processed. Please modify the prompt and try again."
+                logging.info(f"Text Error: {st.session_state.text_error}")
+                return
 
 
     with shorts_spinner_placeholder:
@@ -127,6 +149,15 @@ if "file_path" not in st.session_state:
 if "text_error" not in st.session_state:
     st.session_state.text_error = ""
 
+if "cohere_api_key" not in st.session_state:
+    st.session_state.cohere_api_key = ""
+
+if "elevenlabs_api_key" not in st.session_state:
+    st.session_state.elevenlabs_api_key = ""
+
+if "stable_diffusion_api_key" not in st.session_state:
+    st.session_state.stable_diffusion_api_key = ""
+
 if "visibility" not in st.session_state:
     st.session_state.visibility = "visible"
 
@@ -149,6 +180,10 @@ st.write(
 
 
 # Render Streamlit page
+with st.sidebar:
+    st.session_state.cohere_api_key = st.text_input('Cohere API Key', )
+    st.session_state.elevenlabs_api_key = st.text_input('ElevenLabs API Key', )
+    st.session_state.stable_diffusion_api_key = st.text_input('Stable Diffusion API Key', )
 
 
 # title of the app

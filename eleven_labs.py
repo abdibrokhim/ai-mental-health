@@ -3,11 +3,15 @@ from elevenlabs.api import History
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
-set_api_key(os.getenv("ELEVENLABS_API_KEY"))
 
 
-def with_premade_voice(prompt, voice):
+
+def with_premade_voice(prompt, voice, elevenlabs_api_key):
+    
+    load_dotenv()
+
+    set_api_key(elevenlabs_api_key)
+    
     audio_path = f'static/audio/{voice}.mp3'
 
     audio = generate(
@@ -16,7 +20,7 @@ def with_premade_voice(prompt, voice):
         model="eleven_monolingual_v1"
     )
 
-    play(audio)
+    # play(audio)
 
     try:
         with open(audio_path, 'wb') as f:
