@@ -187,12 +187,17 @@ with st.sidebar:
 
 
 # title of the app
-st.title("MindSpeak: Visualizing Mental Health Support")
+st.title("Video generation app for platforms like Instagram and more!")
 
 
-# st.markdown(
-#     "This is a demo of YouTube shorts generator."
-# )
+st.markdown(
+    "This is a Beta version of video, shorts, reels generation app for popular platforms like Instagram, YouTube, TikTok, and more! This app is powered by [Chroma](https://www.trychroma.com/), [Cohere](https://cohere.ai/), [ElevenLabs](https://beta.elevenlabs.io/), and [Stable Diffusion](https://stability.ai/)."
+)
+
+
+st.markdown(
+    "Built by [abdibrokhim](https://www.linkedin.com/in/abdibrokhim/)."
+)
 
 
 # file upload
